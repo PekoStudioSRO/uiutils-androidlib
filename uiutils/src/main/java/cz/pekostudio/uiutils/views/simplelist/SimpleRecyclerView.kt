@@ -20,8 +20,7 @@ open class SimpleRecyclerView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
-    private var swipeRefreshLayout: SwipeRefreshLayout? = null
-    public var onDataReloadRequest: (() -> Unit)? = null
+    private var dataRefreshManager: DataRefreshManager? = null
 
     init {
         attrs?.let {
@@ -49,52 +48,67 @@ open class SimpleRecyclerView @JvmOverloads constructor(
         }
     }
 
-    public fun <V, O> setAdapter(data: ArrayList<O>, layout: Int, holder: V, onViewBind: V.(item: O, position: Int) -> Unit) {
-        adapter = LinearRecyclerAdapter(context, data, layout, holder, onViewBind)
+    public fun <V, O> setAdapter(
+        data: ArrayList<O>,
+        layout: Int,
+        holder: View.() -> V,
+        onViewBind: V.(item: O, position: Int) -> Unit
+    ) {
+        adapter = SimpleAdapter(context, data, layout, holder, onViewBind)
     }
 
-    class LinearRecyclerAdapter<O, V> internal constructor(
+    public fun setOnDataRequest(onRefreshRequested: () -> Unit) {
+        dataRefreshManager = DataRefreshManager(onRefreshRequested)
+    }
+
+    private class SimpleAdapter<O, V> internal constructor(
         private val context: Context,
         private val data: ArrayList<O>,
         private val layout: Int,
-        private val holder: V,
+        private val holder: View.() -> V,
         private val onViewBind: V.(item: O, position: Int) -> Unit
-    ) : RecyclerView.Adapter<LinearRecyclerAdapter.ViewHolder<V>>() {
+    ) : RecyclerView.Adapter<SimpleAdapter.ViewHolder<V>>() {
 
-        class ViewHolder<V> internal constructor(itemView: View, val views: V) : RecyclerView.ViewHolder(itemView)
+        private class ViewHolder<V> internal constructor(itemView: View, val views: V) : RecyclerView.ViewHolder(itemView)
 
         override fun onCreateViewHolder(root: ViewGroup, viewType: Int): ViewHolder<V> {
-            val view = LayoutInflater.from(context).inflate(layout, root, false) as View
-            return ViewHolder(view, holder)
+            return (LayoutInflater.from(context).inflate(layout, root, false) as View).let {
+                ViewHolder(it, holder(it))
+            }
         }
 
         override fun onBindViewHolder(holder: ViewHolder<V>, position: Int) {
             onViewBind(holder.views, data[position], position)
         }
 
-        override fun getItemCount(): Int {
-            return data.size
-        }
+        override fun getItemCount(): Int = data.size
     }
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        swipeRefreshLayout = findSwipeRefreshLayout()?.apply {
-            setOnRefreshListener { reloadData() }
-        }
-    }
+    private inner class DataRefreshManager(val onRefreshRequested: () -> Unit) {
 
-    public fun reloadData() {
-        onDataReloadRequest?.invoke()
-    }
+        private var swipeRefreshLayout: SwipeRefreshLayout? = null
+        internal var onDataReloadRequest: (() -> Unit)? = null
 
-    private fun findSwipeRefreshLayout(): SwipeRefreshLayout? {
-        (parent as? ViewGroup)?.let {
-            while (true) {
-                return if (it.parent is SwipeRefreshLayout) it as SwipeRefreshLayout else null
+        init {
+            swipeRefreshLayout = findSwipeRefreshLayout()?.apply {
+                setOnRefreshListener { onRefreshRequested() }
             }
+
         }
-        return null
+
+        private fun findSwipeRefreshLayout(): SwipeRefreshLayout? {
+            (parent as? ViewGroup)?.let {
+                while (true) {
+                    return if (it.parent is SwipeRefreshLayout) it as SwipeRefreshLayout else null
+                }
+            }
+            return null
+        }
+
+    }
+
+    public fun requestDataReload() {
+        dataRefreshManager?.onDataReloadRequest?.invoke()
     }
 
     public fun notifyDataSetChanged() {

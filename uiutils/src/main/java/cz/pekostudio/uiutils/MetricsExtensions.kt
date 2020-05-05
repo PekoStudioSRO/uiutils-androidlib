@@ -7,13 +7,13 @@ import android.util.TypedValue
  * Created by Lukas Urbanek on 24/04/2020.
  */
 
-fun Float.dp(): Float = convertTo(TypedValue.COMPLEX_UNIT_DIP)
+val Float.dp: Float get() = convertTo(TypedValue.COMPLEX_UNIT_DIP)
 
-fun Int.dp(): Int = convertTo(TypedValue.COMPLEX_UNIT_DIP).toInt()
+val Int.dp: Int get() = convertTo(TypedValue.COMPLEX_UNIT_DIP).toInt()
 
-fun Float.sp(): Float = convertTo(TypedValue.COMPLEX_UNIT_SP)
+val Float.sp: Float get() = convertTo(TypedValue.COMPLEX_UNIT_SP)
 
-fun Int.sp(): Int = convertTo(TypedValue.COMPLEX_UNIT_SP).toInt()
+val Int.sp: Int get() = convertTo(TypedValue.COMPLEX_UNIT_SP).toInt()
 
 private fun Number.convertTo(unit: Int): Float {
     return TypedValue.applyDimension(unit, this.toFloat(), Resources.getSystem().displayMetrics)
