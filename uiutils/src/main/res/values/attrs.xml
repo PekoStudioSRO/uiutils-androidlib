@@ -19,12 +19,16 @@
         <attr name="image_round_src" format="reference" />
     </declare-styleable>
     <declare-styleable name="SimpleRecyclerView">
+        <attr name="list_layout_manager" format="enum">
+            <enum name="linear" value="0" />
+            <enum name="grid" value="1" />
+        </attr>
         <attr name="list_orientation" format="enum">
             <enum name="vertical" value="0" />
             <enum name="horizontal" value="1" />
-            <enum name="vertical_reversed" value="2" />
-            <enum name="horizontal_reversed" value="3" />
         </attr>
+        <attr name="list_reversed" format="boolean" />
+        <attr name="list_grid_span_count" format="integer" />
         <attr name="list_recycling_enabled" format="boolean" />
     </declare-styleable>
 </resources>

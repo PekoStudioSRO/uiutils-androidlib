@@ -10,7 +10,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
-import cz.pekostudio.datetimepickers.R
+import cz.pekostudio.uiutils.R
 
 /**
  * Created by Lukas Urbanek on 30/04/2020.

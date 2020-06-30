@@ -2,6 +2,7 @@ package cz.pekostudio.uiutils.image
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -28,10 +29,16 @@ class ImageLoader(context: Context) {
             })
     }
 
-    public fun loadIntoView(url: String, imageView: ImageView, transition: Boolean = true) {
+    public fun loadIntoView(
+        url: String,
+        imageView: ImageView,
+        transition: Boolean = true,
+        placeholder: Drawable? = null
+    ) {
         glide
             .load(url)
             .transition(getTransition(transition))
+            .placeholder(placeholder)
             .into(imageView)
     }
 }

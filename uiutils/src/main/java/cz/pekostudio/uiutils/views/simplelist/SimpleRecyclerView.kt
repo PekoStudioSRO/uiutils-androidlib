@@ -5,10 +5,11 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import cz.pekostudio.datetimepickers.R
+import cz.pekostudio.uiutils.R
 import java.util.*
 
 /**
@@ -35,12 +36,19 @@ open class SimpleRecyclerView @JvmOverloads constructor(
                 if (!it) recycledViewPool.setMaxRecycledViews(0, 0)
             }
 
-            getInt(R.styleable.SimpleRecyclerView_list_orientation, 0).let {
+            val reversed = getBoolean(R.styleable.SimpleRecyclerView_list_reversed, false)
+
+            val spanCount = getInt(R.styleable.SimpleRecyclerView_list_grid_span_count, 2)
+
+            val orientation = when (getInt(R.styleable.SimpleRecyclerView_list_orientation, 0)) {
+                1 -> LinearLayoutManager.HORIZONTAL
+                else -> LinearLayoutManager.VERTICAL
+            }
+
+            getInt(R.styleable.SimpleRecyclerView_list_layout_manager, 0).let {
                 layoutManager = when (it) {
-                    1 -> LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                    2 -> LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                    3 -> LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
-                    else -> LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+                    1 -> GridLayoutManager(context, spanCount, orientation, reversed)
+                    else -> LinearLayoutManager(context, orientation, reversed)
                 }
             }
 
@@ -48,7 +56,7 @@ open class SimpleRecyclerView @JvmOverloads constructor(
         }
     }
 
-    public fun <V, O> setAdapter(
+    public fun <V, O> setSimpleAdapter(
         data: ArrayList<O>,
         layout: Int,
         holder: View.() -> V,
@@ -87,7 +95,6 @@ open class SimpleRecyclerView @JvmOverloads constructor(
     private inner class DataRefreshManager(val onRefreshRequested: () -> Unit) {
 
         private var swipeRefreshLayout: SwipeRefreshLayout? = null
-        internal var onDataReloadRequest: (() -> Unit)? = null
 
         init {
             swipeRefreshLayout = findSwipeRefreshLayout()?.apply {
@@ -97,6 +104,7 @@ open class SimpleRecyclerView @JvmOverloads constructor(
         }
 
         private fun findSwipeRefreshLayout(): SwipeRefreshLayout? {
+            if (parent is SwipeRefreshLayout) return parent as SwipeRefreshLayout
             (parent as? ViewGroup)?.let {
                 while (true) {
                     return if (it.parent is SwipeRefreshLayout) it as SwipeRefreshLayout else null
@@ -107,8 +115,8 @@ open class SimpleRecyclerView @JvmOverloads constructor(
 
     }
 
-    public fun requestDataReload() {
-        dataRefreshManager?.onDataReloadRequest?.invoke()
+    public fun reloadData() {
+        dataRefreshManager?.onRefreshRequested?.invoke()
     }
 
     public fun notifyDataSetChanged() {

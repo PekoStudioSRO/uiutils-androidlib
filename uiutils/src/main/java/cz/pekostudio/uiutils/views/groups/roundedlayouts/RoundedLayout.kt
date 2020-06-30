@@ -9,7 +9,7 @@ import android.graphics.drawable.shapes.RoundRectShape
 import android.util.AttributeSet
 import android.view.ViewOutlineProvider
 import android.widget.FrameLayout
-import cz.pekostudio.datetimepickers.R
+import cz.pekostudio.uiutils.R
 import java.lang.IllegalStateException
 
 /**

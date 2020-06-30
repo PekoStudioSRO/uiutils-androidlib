@@ -5,12 +5,14 @@ import android.transition.TransitionManager
 import android.transition.TransitionSet
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.animation.Interpolator
 
 /**
  * Created by Lukas Urbanek on 24/04/2020.
  */
 
+@Deprecated("Use isVisible from ktx-core")
 fun View.setVisiblity(visible: Boolean?, invisibleAsGone: Boolean = true) {
     visibility = if (visible == true) {
         View.VISIBLE
@@ -78,13 +80,12 @@ private fun getAutoTransition(
 }
 
 fun ViewGroup.findViewsByTag(tag: String, onViewFind: (view: View) -> Unit) {
-    for (i in 0 until this.childCount) {
-        val child = this.getChildAt(i)
-        if (child.tag == tag) {
-            onViewFind(child)
+    childs {
+        if (it.tag == tag) {
+            onViewFind(it)
         }
-        if (child is ViewGroup) {
-            child.findViewsByTag(tag, onViewFind)
+        if (it is ViewGroup) {
+            it.findViewsByTag(tag, onViewFind)
         }
     }
 }
@@ -93,4 +94,57 @@ fun View.setMargins(left: Int = 0, top: Int = 0, right: Int = 0, bottom: Int = 0
     (layoutParams as? ViewGroup.MarginLayoutParams)?.run {
         setMargins(left, top, right, bottom)
     }
+}
+
+@JvmName("filteredChilds")
+inline fun <reified O : View> ViewGroup.childs(result: (O) -> Unit) {
+    repeat(childCount) {
+        getChildAt(it)?.let { view ->
+            if (view::class == O::class) {
+                result(view as O)
+            }
+        }
+    }
+}
+
+inline fun ViewGroup.childs(result: (View) -> Unit) {
+    repeat(childCount) {
+        getChildAt(it)?.let { view ->
+            result(view)
+        }
+    }
+}
+
+@JvmName("filteredChildsIndexed")
+inline fun <reified O : View> ViewGroup.childsIndexed(result: (O, index: Int) -> Unit) {
+    var index = 0
+    repeat(childCount) {
+        getChildAt(it)?.let { view ->
+            if (view::class == O::class) {
+                result(view as O, index)
+                index++
+            }
+        }
+    }
+}
+
+inline fun ViewGroup.childsIndexed(result: (View, index: Int) -> Unit) {
+    var index = 0
+    repeat(childCount) {
+        getChildAt(it)?.let { view ->
+            result(view, index)
+            index++
+        }
+    }
+}
+
+fun View.onGlobalLayout(block: () -> Unit) {
+    val view = this
+    view.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            block()
+            view.viewTreeObserver.removeOnGlobalLayoutListener(this)
+        }
+
+    })
 }

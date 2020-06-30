@@ -2,7 +2,6 @@ package cz.pekostudio.uiutils
 
 import android.os.Handler
 import android.os.Looper
-import cz.pekostudio.datetimepickers.R
 
 /**
  * Created by Lukas Urbanek on 24/04/2020.

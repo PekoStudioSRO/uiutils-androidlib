@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
-import cz.pekostudio.datetimepickers.R
+import cz.pekostudio.uiutils.R
 import cz.pekostudio.uiutils.image.ImageLoader
 
 /**
