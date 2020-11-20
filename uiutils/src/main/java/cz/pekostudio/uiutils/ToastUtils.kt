@@ -2,26 +2,33 @@ package cz.pekostudio.uiutils
 
 import android.content.Context
 import android.widget.Toast
+import androidx.annotation.IntRange
 import androidx.annotation.StringRes
 
 /**
  * Created by Lukas Urbanek on 25/06/2020.
  */
 
-fun Context.toast(text: String?, length: Int = Toast.LENGTH_SHORT) {
+fun Context.toast(text: String) {
+    runOnUiThread {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    }
+}
+
+fun Context.toast(@StringRes id: Int) {
+    runOnUiThread {
+        Toast.makeText(this, getString(id), Toast.LENGTH_SHORT).show()
+    }
+}
+
+fun Context.toast(text: String, @IntRange(from = Toast.LENGTH_SHORT.toLong(), to = Toast.LENGTH_LONG.toLong()) length: Int) {
     runOnUiThread {
         Toast.makeText(this, text, length).show()
     }
 }
 
-fun Context.toast(@StringRes stringRes: Int, length: Int = Toast.LENGTH_SHORT) {
+fun Context.toast(@StringRes id: Int,  @IntRange(from = Toast.LENGTH_SHORT.toLong(), to = Toast.LENGTH_LONG.toLong()) length: Int) {
     runOnUiThread {
-        Toast.makeText(this, stringRes, length).show()
-    }
-}
-
-fun String?.showToast(context: Context?, length: Int = Toast.LENGTH_SHORT) {
-    runOnUiThread {
-        Toast.makeText(context, this, length).show()
+        Toast.makeText(this, getString(id), length).show()
     }
 }

@@ -1,2 +1,3 @@
+include ':uiutilstestapplication'
 rootProject.name='UIUtils'
 include ':uiutils'
