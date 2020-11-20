@@ -23,7 +23,9 @@ val Double.quarter: Double get() = this.div(4)
  * @sample 123456.formatDecimal(2) -> "123 456,00"
  */
 fun Number.formatDecimal(digits: Int = 0): String =
-    DecimalFormat("#,###${ if (digits > 0) "." + "0".repeat(digits) else "" }").format(this).format(Locale.getDefault())
+    DecimalFormat("#,##0.${"0".repeat(digits)}")
+        .format(this)
+        .format(Locale.getDefault())
 
 /**
  * @author Miroslav Hýbler
