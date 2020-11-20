@@ -19,12 +19,11 @@ fun getAppVersionString(context: Context, debug: Boolean = false, versionString:
     }
 }
 
-fun onlyApi(api: Int, block: () -> Unit) {
+inline fun onlyApi(api: Int, block: () -> Unit) {
     if (android.os.Build.VERSION.SDK_INT >= api) {
         block()
     }
 }
 
-fun isApi(api: Int): Boolean {
-    return android.os.Build.VERSION.SDK_INT >= api
-}
+fun isApi(api: Int): Boolean =
+    android.os.Build.VERSION.SDK_INT >= api

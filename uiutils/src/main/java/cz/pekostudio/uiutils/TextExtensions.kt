@@ -2,9 +2,12 @@ package cz.pekostudio.uiutils
 
 import android.text.Html
 import android.text.Spanned
+import androidx.annotation.Keep
+import androidx.core.text.HtmlCompat
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.Normalizer
+import java.text.NumberFormat
 import java.util.*
 
 /**
@@ -23,9 +26,9 @@ infix fun String?.searchContains(to: String?): Boolean {
     return string2?.let { string1?.contains(it) } ?: false
 }
 
-fun String.remove(toRemove: String, ignoreCase: Boolean = false): String {
-    return replace(toRemove, "", ignoreCase = ignoreCase)
-}
+fun String.remove(toRemove: String, ignoreCase: Boolean = false): String =
+    replace(toRemove, "", ignoreCase = ignoreCase)
+
 
 fun String.md5(): String {
     return try {
@@ -42,6 +45,5 @@ fun String.md5(): String {
     }
 }
 
-fun html(html: String): Spanned {
-    return Html.fromHtml(html)
-}
+fun html(html: String): Spanned =
+    HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)

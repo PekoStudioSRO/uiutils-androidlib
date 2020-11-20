@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Color
 import android.widget.TextView
 import cz.pekostudio.uiutils.R
+import cz.pekostudio.uiutils.formatDecimal
 import cz.pekostudio.uiutils.image.withAlpha
 import cz.pekostudio.uiutils.views.simplelist.SimpleRecyclerView
 
@@ -34,5 +35,4 @@ fun Activity.main() {
 
         }
     }
-
 }
