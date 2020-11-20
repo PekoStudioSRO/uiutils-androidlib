@@ -94,7 +94,7 @@ open class SimpleRecyclerView @JvmOverloads constructor(
 
     private inner class DataRefreshManager(val onRefreshRequested: () -> Unit) {
 
-        private var swipeRefreshLayout: SwipeRefreshLayout? = null
+        internal var swipeRefreshLayout: SwipeRefreshLayout? = null
 
         init {
             swipeRefreshLayout = findSwipeRefreshLayout()?.apply {
@@ -121,6 +121,11 @@ open class SimpleRecyclerView @JvmOverloads constructor(
 
     public fun notifyDataSetChanged() {
         adapter?.notifyDataSetChanged()
+        hideLoading()
+    }
+
+    public fun hideLoading() {
+        dataRefreshManager?.swipeRefreshLayout?.isRefreshing = false
     }
 
 }

@@ -1,5 +1,8 @@
 package cz.pekostudio.uiutils.views
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.transition.TransitionSet
@@ -7,6 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.animation.Interpolator
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.ScrollView
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
+import androidx.core.widget.NestedScrollView
+import cz.pekostudio.uiutils.dp
+import cz.pekostudio.uiutils.runDelayed
 
 /**
  * Created by Lukas Urbanek on 24/04/2020.
@@ -147,4 +158,36 @@ fun View.onGlobalLayout(block: () -> Unit) {
         }
 
     })
+}
+
+fun View.scrollHere() {
+
+    fun View.disableScroll(disabled: Boolean) { tag = disabled }
+
+    fun View.isScrollDisabled() = tag as? Boolean == true
+
+    var viewYPosInScrollView = top
+
+    fun View.findScrollView(): FrameLayout? = when (parent) {
+        is NestedScrollView -> parent
+        is ScrollView -> parent
+        else -> (parent as? ViewGroup)?.apply {
+            viewYPosInScrollView += top
+        }?.findScrollView()
+    } as? FrameLayout?
+
+    findScrollView()?.run {
+        if (isScrollDisabled()) return
+        disableScroll(true)
+        when(this) {
+            is NestedScrollView -> smoothScrollTo(0, viewYPosInScrollView - 18.dp, 500)
+            is ScrollView -> smoothScrollTo(0, viewYPosInScrollView - 18.dp)
+        }
+        runDelayed(500) { disableScroll(false) }
+    }
+}
+
+inline fun <reified T: View> ViewGroup.findFirstViewByType(): T? {
+    childs<T> { return it }
+    return null
 }
