@@ -3,11 +3,14 @@ package cz.pekostudio.uiutils.views.groups.roundedlayouts
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.util.AttributeSet
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
 import cz.pekostudio.uiutils.R
 import cz.pekostudio.uiutils.image.ImageLoader
+import cz.pekostudio.uiutils.image.load
+import java.io.File
 
 /**
  * Created by Lukas Urbanek on 30/04/2020.
@@ -49,14 +52,15 @@ open class RoundedImageView @JvmOverloads constructor(
         }
     }
 
+    @Deprecated("this will be removed", ReplaceWith("load(drawable)") )
     public fun setImageDrawable(drawable: Drawable) {
         imageView?.setImageDrawable(drawable)
     }
-
+    @Deprecated("this will be removed", ReplaceWith("load(bitmap)") )
     public fun setImageBitmap(bitmap: Bitmap) {
         imageView?.setImageBitmap(bitmap)
     }
-
+    @Deprecated("this will be removed", ReplaceWith("load(url)") )
     public fun setImageUrl(url: String, transition: Boolean = true) {
         imageView?.let {
             ImageLoader(context)
@@ -65,6 +69,30 @@ open class RoundedImageView @JvmOverloads constructor(
     }
 
     public fun setImageResource(resource: Int) {
+        imageView?.setImageResource(resource)
+    }
+
+    fun load(drawable: Drawable) {
+       imageView?.load(drawable)
+    }
+
+    fun load(bitmap: Bitmap) {
+        imageView?.load(bitmap)
+    }
+
+    fun load(file: File) {
+        imageView?.load(file)
+    }
+
+    fun load(uri: Uri) {
+        imageView?.load(uri)
+    }
+
+    fun load(url: String, transition: Boolean = true) {
+        imageView?.load(url, transition)
+    }
+
+    fun load(resource: Int) {
         imageView?.setImageResource(resource)
     }
 }

@@ -51,6 +51,10 @@ class ImageLoader(context: Context) {
         glide.load(drawable).transition(getTransition(transition)).placeholder(placeholder).into(imageView)
     }
 
+    fun loadIntoView(bitmap: Bitmap, imageView: ImageView, transition: Boolean = true, placeholder: Drawable? = null) {
+        glide.load(bitmap).transition(getTransition(transition)).placeholder(placeholder).into(imageView)
+    }
+
     private fun getTransition(enabled: Boolean): DrawableTransitionOptions =
         withCrossFade(DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(enabled).build())
 }

@@ -27,7 +27,7 @@ fun Context.toast(text: String, @IntRange(from = Toast.LENGTH_SHORT.toLong(), to
     }
 }
 
-fun Context.toast(@StringRes id: Int,  @IntRange(from = Toast.LENGTH_SHORT.toLong(), to = Toast.LENGTH_LONG.toLong()) length: Int) {
+fun Context.toast(@StringRes id: Int, @IntRange(from = Toast.LENGTH_SHORT.toLong(), to = Toast.LENGTH_LONG.toLong()) length: Int) {
     runOnUiThread {
         Toast.makeText(this, getString(id), length).show()
     }

@@ -1,8 +1,8 @@
 package cz.pekostudio.uiutilstestapplication
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import cz.pekostudio.uiutils.formatCurrency
 import cz.pekostudio.uiutils.formatDecimal
 import java.util.*
@@ -26,14 +26,16 @@ class MainActivity : AppCompatActivity() {
         Log.d(debugTag,"Int.formatDecimal(2) -> ${num.formatDecimal(2)}")
 
         Log.d(debugTag, "Double.formatDecimal() -> ${numD.formatDecimal()}")
-        Log.d(debugTag,"Double.formatDecimal(2) -> ${numD.formatDecimal(2)}")
+        Log.d(debugTag,"Double.formatDecimal(3) -> ${numD.formatDecimal(3)}")
 
         Log.d(debugTag, "Float.formatDecimal() -> ${numF.formatDecimal()}")
-        Log.d(debugTag,"Float.formatDecimal(2) -> ${numF.formatDecimal(2)}")
+        Log.d(debugTag,"Float.formatDecimal(1) -> ${numF.formatDecimal(1)}")
 
         Log.d(debugTag, "Int.toCurrency() -> ${num.formatCurrency()}")
         Log.d(debugTag, "Double.toCurrency(Locale.UK) ->  ${numD.formatCurrency(Locale.UK)}")
         Log.d(debugTag, "Float.toCurrency() ->  ${numF.formatCurrency()}")
 
+
+        Log.d(debugTag, "formatDecimal(0) -> ${num.formatDecimal(0)}")
     }
 }

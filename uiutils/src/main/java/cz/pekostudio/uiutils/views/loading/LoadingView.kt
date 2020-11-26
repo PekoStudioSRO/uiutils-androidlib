@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import cz.pekostudio.uiutils.R
 import cz.pekostudio.uiutils.dp
 import cz.pekostudio.uiutils.image.withAlpha
@@ -27,7 +28,7 @@ open class LoadingView @JvmOverloads constructor(
         findViewById<View>(R.id.bg).apply {
             setBackgroundColor(Color.BLACK withAlpha 100)
         }
-        setVisiblity(false)
+        isVisible = false
         translationZ = 200f.dp
     }
 
@@ -35,7 +36,7 @@ open class LoadingView @JvmOverloads constructor(
     set(value) {
         field = value
         startGroupTransition()
-        setVisiblity(field)
+        isVisible = field
     }
 
 }

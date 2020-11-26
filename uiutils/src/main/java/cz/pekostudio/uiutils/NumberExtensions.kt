@@ -16,6 +16,9 @@ val Int.quarter: Int get() = this.div(4)
 val Double.half: Double get() = this.div(2)
 val Double.quarter: Double get() = this.div(4)
 
+val Long.half: Long get() = this.div(2)
+val Long.quarter: Long get() = this.div(4)
+
 /**
  * @author Miroslav Hýbler
  * @param digits -> number of digits after decimal point
@@ -23,7 +26,7 @@ val Double.quarter: Double get() = this.div(4)
  * @sample 123456.formatDecimal(2) -> "123 456,00"
  */
 fun Number.formatDecimal(digits: Int = 0): String =
-    DecimalFormat("#,##0.${"0".repeat(digits)}")
+    DecimalFormat("#,##0${if (digits > 0) ".${"0".repeat(digits)}" else ""}")
         .format(this)
         .format(Locale.getDefault())
 
@@ -35,3 +38,6 @@ fun Number.formatDecimal(digits: Int = 0): String =
  */
 fun Number.formatCurrency(locale: Locale = Locale.getDefault()): String =
     NumberFormat.getCurrencyInstance(locale).format(this)
+
+fun Number.formatCZCurrency(): String =
+        NumberFormat.getCurrencyInstance(Locale("cs", "CZ")).format(this)

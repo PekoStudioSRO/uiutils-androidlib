@@ -2,6 +2,7 @@ package cz.pekostudio.uiutils
 
 import android.text.Html
 import android.text.Spanned
+import android.text.TextUtils
 import androidx.annotation.Keep
 import androidx.core.text.HtmlCompat
 import java.security.MessageDigest
@@ -45,5 +46,22 @@ fun String.md5(): String {
     }
 }
 
+@Deprecated(
+    message = "deprecated",
+    replaceWith = ReplaceWith("String?.html()", "cz.pekostudio.uiutils.html"))
 fun html(html: String): Spanned =
     HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+@JvmName("toHtml")
+fun String?.html(): Spanned =
+    HtmlCompat.fromHtml(this?: "", HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+/**
+ * @author Miroslav Hýbler
+ * checks if string is not empty and if its in valid email format
+ * @sample "example@.com".isEmail() -> true
+ * @sample "aaa.bbb".isEmail() -> false
+ * @return true if caller string is email, false otherwise
+ */
+fun String?.isEmail(): Boolean =
+    !TextUtils.isEmpty(this) && android.util.Patterns.EMAIL_ADDRESS.matcher(this?: "").matches()

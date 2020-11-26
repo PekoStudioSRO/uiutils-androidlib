@@ -62,6 +62,8 @@ fun RecyclerView.ViewHolder.getString(@StringRes id: Int) = itemView.context.get
 
 fun RecyclerView.ViewHolder.quantityString(@PluralsRes id: Int, int: Int, vararg params: Any) = itemView.context.quantityString(id, int, *params)
 
+val RecyclerView.ViewHolder.context: Context get() = itemView.context
+
 
 /**
  * referencing resources inside Dialog from its context

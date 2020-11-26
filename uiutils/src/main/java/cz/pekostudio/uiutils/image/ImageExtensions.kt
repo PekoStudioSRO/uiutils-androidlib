@@ -2,6 +2,7 @@ package cz.pekostudio.uiutils.image
 
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.View
@@ -40,6 +41,10 @@ fun ImageView.load(sourceId: Int, transition: Boolean = true, placeholder: Drawa
 
 fun ImageView.load(drawable: Drawable, transition: Boolean = true, placeholder: Drawable? = null) {
     ImageLoader(context).loadIntoView(drawable, this, transition, placeholder)
+}
+
+fun ImageView.load(bitmap: Bitmap, transition: Boolean = true, placeholder: Drawable? = null) {
+    ImageLoader(context).loadIntoView(bitmap, this, transition, placeholder)
 }
 
 
