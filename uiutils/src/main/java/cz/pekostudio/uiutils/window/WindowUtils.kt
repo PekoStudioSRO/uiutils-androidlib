@@ -4,20 +4,36 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.view.View
+import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
 import cz.pekostudio.uiutils.onlyApi
 
 /**
  * Created by Lukas Urbanek on 27.5.19.
  */
 
+@Deprecated(
+    message = "use Activity.setLightStatusBar(light: Boolean = true)",
+    replaceWith = ReplaceWith("use Activity.setLightStatusBar(light: Boolean = true)")
+)
 fun Activity.setLightStatusBar(light: Boolean = true, alwaysDarkOnDarkmode: Boolean = true) {
     onlyApi(23) {
         if (if (alwaysDarkOnDarkmode && isDarkMode(window.context)) false else light) {
-            window.decorView.systemUiVisibility =
                 window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         } else {
             window.decorView.systemUiVisibility =
                 window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+        }
+    }
+}
+
+fun Activity.setLightStatusBar(light: Boolean = true) {
+    onlyApi(23) {
+        window?.insetsController?.run {
+            if (light) {
+                setSystemBarsAppearance(APPEARANCE_LIGHT_STATUS_BARS, APPEARANCE_LIGHT_STATUS_BARS)
+            } else {
+                setSystemBarsAppearance(0, APPEARANCE_LIGHT_STATUS_BARS)
+            }
         }
     }
 }
