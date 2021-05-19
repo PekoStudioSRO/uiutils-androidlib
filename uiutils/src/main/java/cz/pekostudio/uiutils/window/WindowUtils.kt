@@ -18,6 +18,7 @@ import cz.pekostudio.uiutils.onlyApi
 fun Activity.setLightStatusBar(light: Boolean = true, alwaysDarkOnDarkmode: Boolean = true) {
     onlyApi(23) {
         if (if (alwaysDarkOnDarkmode && isDarkMode(window.context)) false else light) {
+            window.decorView.systemUiVisibility =
                 window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         } else {
             window.decorView.systemUiVisibility =
@@ -27,12 +28,23 @@ fun Activity.setLightStatusBar(light: Boolean = true, alwaysDarkOnDarkmode: Bool
 }
 
 fun Activity.setLightStatusBar(light: Boolean = true) {
-    onlyApi(23) {
-        window?.insetsController?.run {
+    when {
+        android.os.Build.VERSION.SDK_INT >= 30 -> {
+            window?.insetsController?.run {
+                if (light) {
+                    setSystemBarsAppearance(APPEARANCE_LIGHT_STATUS_BARS, APPEARANCE_LIGHT_STATUS_BARS)
+                } else {
+                    setSystemBarsAppearance(0, APPEARANCE_LIGHT_STATUS_BARS)
+                }
+            }
+        }
+        android.os.Build.VERSION.SDK_INT >= 23 -> {
             if (light) {
-                setSystemBarsAppearance(APPEARANCE_LIGHT_STATUS_BARS, APPEARANCE_LIGHT_STATUS_BARS)
+                window.decorView.systemUiVisibility =
+                    window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             } else {
-                setSystemBarsAppearance(0, APPEARANCE_LIGHT_STATUS_BARS)
+                window.decorView.systemUiVisibility =
+                    window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
             }
         }
     }
